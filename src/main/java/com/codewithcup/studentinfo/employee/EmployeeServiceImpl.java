@@ -15,11 +15,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     static {
 
         employeeList = List.of(
-                new Employee(111,"Alisa","alisa@gmail.com",new Date(),Employee.Gender.FEMALE),
-                new Employee(112,"Jhon","Jhon@gmail.com",new Date(),Employee.Gender.MALE),
-                new Employee(113,"Samntha","Samantha@gmail.com",new Date(),Employee.Gender.FEMALE),
-                new Employee(114,"James","James@gmail.com",new Date(),Employee.Gender.MALE),
-                new Employee(115,"Jonny","Jonney@gmail.com",new Date(),Employee.Gender.MALE)
+                new Employee(1,"Alisa","alisa@gmail.com",new Date(),Employee.Gender.FEMALE),
+                new Employee(2,"Jhon","Jhon@gmail.com",new Date(),Employee.Gender.MALE),
+                new Employee(3,"Samntha","Samantha@gmail.com",new Date(),Employee.Gender.FEMALE),
+                new Employee(4,"James","James@gmail.com",new Date(),Employee.Gender.MALE),
+                new Employee(5,"Jonny","Jonney@gmail.com",new Date(),Employee.Gender.MALE)
         );
     }
 
@@ -40,10 +40,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee saveEmployee(Employee employee) {
-//        System.out.println("========================" + employee.toString());
-
+//        if(employee.getEmpId()==null){
+//            employee.setEmpId(++count);
+//        }
         employee.setEmpId(++count);
-        System.out.println("========================" + employee.toString());
         employeeList.add(employee);
         return employee;
     }

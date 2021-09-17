@@ -1,7 +1,9 @@
 package com.codewithcup.studentinfo.employee.exception;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,4 +27,15 @@ public class CustomizeResponseEnitiyExceptionHandler extends ResponseEntityExcep
         GlobalExceptionResponse globalExceptionResponse = new GlobalExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(globalExceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+//    For validations
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        GlobalExceptionResponse globalExceptionResponse = new GlobalExceptionResponse(
+                new Date(), ex.getMessage(),
+                "Validation Failed"
+        );
+        return new ResponseEntity(globalExceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+
 }
