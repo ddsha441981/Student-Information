@@ -1,8 +1,9 @@
 package com.codewithcup.studentinfo.employee;
 
-import com.codewithcup.studentinfo.employee.exception.EmployeeListException;
 import com.codewithcup.studentinfo.employee.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -19,22 +23,27 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getEmployeesList() {
+    @GetMapping("/all-employee")
+    public ResponseEntity<?> retriveAllEmployees() {
         List<Employee> employeeList = employeeService.getEmployeeList();
-        if (employeeList.isEmpty() && employeeList == null) {
-            throw new EmployeeListException("employee List %" + employeeList);
-        }
         return ResponseEntity.status(HttpStatus.OK).body(employeeList);
     }
 
     @GetMapping("/all/{empId}")
-    public Employee getEmployeesOne(@PathVariable int empId) {
+    public EntityModel<Employee> getEmployeesOne(@PathVariable int empId) {
         Employee oneEmployee = employeeService.getOneEmployee(empId);
         if(oneEmployee == null)
              throw new UserNotFoundException("id { } " + empId);
 
-            return oneEmployee;
+        //"all-users" + SERVER_PATH+ "/users"
+        //retriveAllEmployees
+        //HATEOAS
+        /*-------------------------------------- //HATEOAS//------------------------------------------------*/
+        EntityModel<Employee> entity = EntityModel.of(oneEmployee);
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retriveAllEmployees());
+        entity.add(linkTo.withRel("all-employee"));
+        /*-------------------------------------- //HATEOAS//------------------------------------------------*/
+            return entity;
     }
 
     @PostMapping("/create")
