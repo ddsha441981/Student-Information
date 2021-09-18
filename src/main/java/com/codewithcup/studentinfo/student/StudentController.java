@@ -1,6 +1,6 @@
 package com.codewithcup.studentinfo.student;
 
-import com.codewithcup.studentinfo.student.exceptions.UserNotFoundException;
+import com.codewithcup.studentinfo.employee.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,4 +53,6 @@ public class StudentController {
         System.out.println(name);
         return String.format(" Student Name is : %s ", name);
     }
+
+
 }

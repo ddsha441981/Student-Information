@@ -1,64 +1,63 @@
 package com.codewithcup.studentinfo.employee;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
+import static com.codewithcup.studentinfo.employee.dummydata.EmployeeDummy.employeeList;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
-     int count = 5;
-    private static List<Employee> employeeList;
-    //static data
-    static {
-
-        employeeList = List.of(
-                new Employee(1,"Alisa","alisa@gmail.com",new Date(),Employee.Gender.FEMALE),
-                new Employee(2,"Jhon","Jhon@gmail.com",new Date(),Employee.Gender.MALE),
-                new Employee(3,"Samntha","Samantha@gmail.com",new Date(),Employee.Gender.FEMALE),
-                new Employee(4,"James","James@gmail.com",new Date(),Employee.Gender.MALE),
-                new Employee(5,"Jonny","Jonney@gmail.com",new Date(),Employee.Gender.MALE)
-        );
-    }
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Override
     public List<Employee> getEmployeeList() {
-        return employeeList;
+        return employeeRepository.findAll();
+//       return employeeList;
     }
 
     @Override
     public Employee getOneEmployee(int empId) {
-        for (Employee element : employeeList) {
-            if (element.getEmpId() == empId) {
-                return element;
-            }
+        Optional<Employee> eById = employeeRepository.findById(empId);
+        if(eById.isPresent()){
+            return eById.get();
         }
+//        for (Employee element : employeeList) {
+//            if (element.getEmpId() == empId) {
+//                return element;
+//            }
         return null;
     }
+
 
     @Override
     public Employee saveEmployee(Employee employee) {
 //        if(employee.getEmpId()==null){
 //            employee.setEmpId(++count);
 //        }
-        employee.setEmpId(++count);
-        employeeList.add(employee);
+//        employee.setEmpId(++count);
+//        employeeList.add(employee);
+        employeeRepository.save(employee);
         return employee;
     }
 
     @Override
-    public Employee deleteEmployee(int empId) {
-        Iterator<Employee> iterator = employeeList.iterator();
-        while (iterator.hasNext()){
-            Employee e = iterator.next();
-            if(e.getEmpId()==empId){
-                iterator.remove();
-                return e;
-            }
-        }
-        return null;
+    public void deleteEmployee(int empId) {
+//        Iterator<Employee> iterator = employeeList.iterator();
+//        while (iterator.hasNext()) {
+//            Employee e = iterator.next();
+//            if (e.getEmpId() == empId) {
+//                iterator.remove();
+//                return e;
+//            }
+//        }
+//        return null;
+        Employee employee = new Employee();
+        employee.setEmpId(empId);
+       employeeRepository.deleteById(empId);
     }
 
     @Override
